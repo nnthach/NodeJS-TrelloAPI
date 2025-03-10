@@ -2,14 +2,13 @@ import express from "express";
 import exitHook from "async-exit-hook";
 import { CONNECT_DB, CLOSE_DB } from "~/config/mongodb";
 import { env } from "~/config//environment";
+import { APIs_V1 } from "~/routes/v1";
 
 const START_SERVER = () => {
   const app = express();
   const port = env.APP_PORT;
 
-  app.get("/", async (req, res) => {
-    res.send("Hello World!");
-  });
+  app.use("/v1", APIs_V1);
 
   app.listen(port, () => {
     console.log(`3. Hello ${env.AUTHOR}! Let's start your app on port ${port}`);
