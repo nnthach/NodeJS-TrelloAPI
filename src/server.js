@@ -1,5 +1,6 @@
 import express from "express";
-import { CONNECT_DB, GET_DB } from "~/config/mongodb";
+import exitHook from "async-exit-hook";
+import { CONNECT_DB, GET_DB, CLOSE_DB } from "~/config/mongodb";
 
 const START_SERVER = () => {
   const app = express();
@@ -12,6 +13,12 @@ const START_SERVER = () => {
 
   app.listen(port, () => {
     console.log(`3. Hello! Let's start your app on port ${port}`);
+  });
+
+  exitHook(() => {
+    console.log("4. Disconnecting");
+    CLOSE_DB();
+    console.log("5. Disconnected");
   });
 };
 
@@ -27,4 +34,3 @@ const START_SERVER = () => {
     process.exit(0);
   }
 })();
-
