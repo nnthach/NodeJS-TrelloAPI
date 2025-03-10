@@ -1,18 +1,18 @@
 import express from "express";
 import exitHook from "async-exit-hook";
-import { CONNECT_DB, GET_DB, CLOSE_DB } from "~/config/mongodb";
+import { CONNECT_DB, CLOSE_DB } from "~/config/mongodb";
+import { env } from "~/config//environment";
 
 const START_SERVER = () => {
   const app = express();
-  const port = 2301;
+  const port = env.APP_PORT;
 
   app.get("/", async (req, res) => {
-    console.log(await GET_DB().listCollections().toArray());
     res.send("Hello World!");
   });
 
   app.listen(port, () => {
-    console.log(`3. Hello! Let's start your app on port ${port}`);
+    console.log(`3. Hello ${env.AUTHOR}! Let's start your app on port ${port}`);
   });
 
   exitHook(() => {

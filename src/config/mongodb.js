@@ -1,16 +1,10 @@
-// pW9fVjzQjOF6obXq
-
-const MONGODB_URI =
-  "mongodb+srv://nnthach:pW9fVjzQjOF6obXq@cluster0-nnthach.hjacn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0-nnthach";
-
-const DATABASE_NAME = "trello-nnthach";
-
 import { MongoClient, ServerApiVersion } from "mongodb";
+import { env } from "~/config//environment";
 
 let trelloDBInstance = null;
 
 // https://www.mongodb.com/docs/drivers/node/current/fundamentals/stable-api/
-const mongoClientInstance = new MongoClient(MONGODB_URI, {
+const mongoClientInstance = new MongoClient(env.MONGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -24,7 +18,7 @@ export const CONNECT_DB = async () => {
   await mongoClientInstance.connect();
 
   // Connect success => take db name
-  trelloDBInstance = mongoClientInstance.db(DATABASE_NAME);
+  trelloDBInstance = mongoClientInstance.db(env.DATABASE_NAME);
 };
 
 // Dùng để export trelloDBInstance after connect success to MongoDb for reuse anywhere in code
@@ -35,6 +29,6 @@ export const GET_DB = () => {
 
 // Close db
 export const CLOSE_DB = async () => {
-  console.log('Run close_db')
+  console.log("Run close_db");
   await mongoClientInstance.close();
 };
