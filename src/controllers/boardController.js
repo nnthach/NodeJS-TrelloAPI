@@ -1,4 +1,5 @@
 import { StatusCodes } from "http-status-codes";
+import { boardService } from "~/services/boardService";
 import ApiError from "~/utils/ApiError";
 
 const createNew = async (req, res, next) => {
@@ -11,11 +12,10 @@ const createNew = async (req, res, next) => {
     console.log("req jwtDecoded", req.jwtDecoded);
 
     // Điều hướng dữ liệu sang tầng Service
+    const createdBoard = await boardService.createNew(req.body);
 
     // Có kết quả trả về Client
-    res
-      .status(StatusCodes.CREATED)
-      .json({ message: "POST from Controller APIs create new board" });
+    res.status(StatusCodes.CREATED).json(createdBoard);
   } catch (error) {
     next(error); // Có error điêu hướng qua middleware error handling
   }
