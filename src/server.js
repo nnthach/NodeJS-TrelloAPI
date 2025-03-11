@@ -8,6 +8,9 @@ const START_SERVER = () => {
   const app = express();
   const port = env.APP_PORT;
 
+  // Enable req.body json data
+  app.use(express.json())
+
   app.use("/v1", APIs_V1);
 
   app.listen(port, () => {
