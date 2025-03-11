@@ -3,15 +3,19 @@ import exitHook from "async-exit-hook";
 import { CONNECT_DB, CLOSE_DB } from "~/config/mongodb";
 import { env } from "~/config//environment";
 import { APIs_V1 } from "~/routes/v1";
+import { errorHandlingMiddleware } from "~/middlewares/errorHandlingMiddleware";
 
 const START_SERVER = () => {
   const app = express();
   const port = env.APP_PORT;
 
   // Enable req.body json data
-  app.use(express.json())
+  app.use(express.json());
 
   app.use("/v1", APIs_V1);
+
+  // Middleware error handling
+  app.use(errorHandlingMiddleware);
 
   app.listen(port, () => {
     console.log(`3. Hello ${env.AUTHOR}! Let's start your app on port ${port}`);
