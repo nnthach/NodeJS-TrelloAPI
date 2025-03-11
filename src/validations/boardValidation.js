@@ -27,16 +27,10 @@ const createNew = async (req, res, next) => {
   });
 
   try {
-    console.log("req body post board", req.body);
-
     // abortEarly false để trả về tất cả các lỗi của tất cả field
     await correctCondition.validateAsync(req.body, { abortEarly: false });
-
+    // Validate hợp lệ chuyển tiếp tới Controller
     next();
-
-    res
-      .status(StatusCodes.CREATED)
-      .json({ message: "Validate APIs create new board" });
   } catch (error) {
     res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
       errors: new Error(error).message,
