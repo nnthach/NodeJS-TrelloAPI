@@ -66,9 +66,40 @@ const findOneById = async (id) => {
   }
 };
 
+// Get All Board
+const getAllBoard = async () => {
+  try {
+    const result = await GET_DB()
+      .collection(BOARD_COLLECTION_NAME)
+      .find()
+      .toArray();
+
+    return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+// Get by ID
+const getDetail = async (id) => {
+  try {
+    const result = await GET_DB()
+      .collection(BOARD_COLLECTION_NAME)
+      .findOne({
+        _id: new ObjectId(id),
+      });
+
+    return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const boardModel = {
   BOARD_COLLECTION_NAME,
   BOARD_COLLECTION_SCHEMA,
   createNew,
   findOneById,
+  getDetail,
+  getAllBoard,
 };

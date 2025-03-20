@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { boardModel } from "~/models/boardModel";
 import ApiError from "~/utils/ApiError";
 import { slugify } from "~/utils/Formatters";
@@ -26,6 +27,36 @@ const createNew = async (reqBody) => {
   }
 };
 
+const getAllBoard = async () => {
+  try {
+    const gotAllBoard = await boardModel.getAllBoard();
+
+    if (!gotAllBoard) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Board list not found");
+    }
+
+    return gotAllBoard;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getDetail = async (boardId) => {
+  try {
+    const gotBoard = await boardModel.getDetail(boardId);
+
+    if (!gotBoard) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Board not found");
+    }
+
+    return gotBoard;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const boardService = {
   createNew,
+  getDetail,
+  getAllBoard,
 };
