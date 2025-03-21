@@ -117,7 +117,30 @@ const getDetail = async (id) => {
       ])
       .toArray();
 
-    return result[0] || {}; // take single board by id
+    return result[0] || null; // take single board by id
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+// Cập nhật push giá trị columnId vào mảng columnOrderIds
+const pushColumnOrderIds = async (column) => {
+  try {
+    const result = await GET_DB()
+      .collection(BOARD_COLLECTION_NAME)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(column.boardId),
+        },
+        {
+          $push: {
+            columnOrderIds: new ObjectId(column._id),
+          },
+        },
+        { returnDocument: "after" }
+      );
+
+    return result.value; // findOneAndUpdate trả về kqua phải .value để nhận
   } catch (error) {
     throw new Error(error);
   }
@@ -130,4 +153,5 @@ export const boardModel = {
   findOneById,
   getDetail,
   getAllBoard,
+  pushColumnOrderIds,
 };
