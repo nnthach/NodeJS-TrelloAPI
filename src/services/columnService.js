@@ -18,12 +18,12 @@ const createNew = async (reqBody) => {
     console.log("get id from new Column", getNewColumn);
 
     //3. Another logic function....
-    if(getNewColumn){
+    if (getNewColumn) {
       // Xử lý cấu trúc data
       // getNewColumn.cards = []
 
       // Cập nhật mảng columnOrderIds trong boards
-      await boardModel.pushColumnOrderIds(getNewColumn)
+      await boardModel.pushColumnOrderIds(getNewColumn);
     }
 
     //4. Return result
@@ -33,6 +33,25 @@ const createNew = async (reqBody) => {
   }
 };
 
+const update = async (columnId, reqBody) => {
+  try {
+    const updateData = {
+      ...reqBody,
+      updatedAt: Date.now(),
+    };
+
+    console.log("data tto update", updateData);
+
+    const updatedColumn = await columnModel.update(columnId, updateData);
+
+    console.log("updatte at service", updatedColumn);
+    return updatedColumn;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const columnService = {
   createNew,
+  update,
 };

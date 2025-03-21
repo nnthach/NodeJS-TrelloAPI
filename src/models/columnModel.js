@@ -22,6 +22,8 @@ const COLUMN_COLLECTION_SCHEMA = Joi.object({
   _destroy: Joi.boolean().default(false),
 });
 
+const INVALID_UPDATE_FIELD = ["_id", "createdAt", "boardId"];
+
 // 1.Validate
 const validateBeforeCreate = async (data) => {
   const validate = await COLUMN_COLLECTION_SCHEMA.validateAsync(data, {
@@ -89,10 +91,40 @@ const pushCardOrderIds = async (card) => {
   }
 };
 
+// Update card position in same column
+const update = async (columnId, updateData) => {
+  try {
+    Object.keys(updateData).forEach((fieldName) => {
+      if (INVALID_UPDATE_FIELD.includes(fieldName)) {
+        delete updateData[fieldName];
+      }
+    });
+
+    console.log("updateData", updateData);
+
+    const result = await GET_DB()
+      .collection(COLUMN_COLLECTION_NAME)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(columnId),
+        },
+        {
+          $set: updateData,
+        },
+        { returnDocument: "after" }
+      );
+
+    return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const columnModel = {
   COLUMN_COLLECTION_NAME,
   COLUMN_COLLECTION_SCHEMA,
   createNew,
   findOneById,
   pushCardOrderIds,
+  update,
 };
