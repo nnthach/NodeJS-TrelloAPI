@@ -69,8 +69,27 @@ const getDetail = async (boardId) => {
   }
 };
 
+const update = async (boardId, reqBody) => {
+  try {
+    const updateData = {
+      ...reqBody,
+      updatedAt: Date.now(),
+    };
+
+    console.log("data tto update", updateData);
+
+    const updatedBoard = await boardModel.update(boardId, updateData);
+
+    console.log("updatte at service", updatedBoard);
+    return updatedBoard;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const boardService = {
   createNew,
   getDetail,
   getAllBoard,
+  update,
 };

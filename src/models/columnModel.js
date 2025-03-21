@@ -83,7 +83,7 @@ const pushCardOrderIds = async (card) => {
         { returnDocument: "after" }
       );
 
-    return result.value; // findOneAndUpdate trả về kqua phải .value để nhận
+    return result;
   } catch (error) {
     throw new Error(error);
   }
