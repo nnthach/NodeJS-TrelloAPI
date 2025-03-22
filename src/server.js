@@ -9,7 +9,7 @@ import { corsOptions } from "~/config/cors";
 
 const START_SERVER = () => {
   const app = express();
-  const port = env.APP_PORT;
+  const port = env.LOCAL_DEV_APP_PORT;
 
   app.use(cors(corsOptions));
 
@@ -21,9 +21,19 @@ const START_SERVER = () => {
   // Middleware error handling
   app.use(errorHandlingMiddleware);
 
-  app.listen(port, () => {
-    console.log(`3. Hello ${env.AUTHOR}! Let's start your app on port ${port}`);
-  });
+  if (env.BUILD_MODE === "production") {
+    app.listen(process.env.PORT, () => {
+      console.log(
+        `3. Production: Hello ${env.AUTHOR}! Let's start your app on port ${process.env.PORT}`
+      );
+    });
+  } else {
+    app.listen(port, () => {
+      console.log(
+        `3. Dev: Hello ${env.AUTHOR}! Let's start your app on port ${port}`
+      );
+    });
+  }
 
   exitHook(() => {
     console.log("4. Disconnecting");
