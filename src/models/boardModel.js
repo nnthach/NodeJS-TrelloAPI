@@ -160,6 +160,12 @@ const update = async (boardId, updateData) => {
 
     console.log("updateData", updateData);
 
+    if (updateData.columnOrderIds) {
+      updateData.columnOrderIds = updateData.columnOrderIds.map(
+        (_id) => new ObjectId(_id)
+      );
+    }
+
     const result = await GET_DB()
       .collection(BOARD_COLLECTION_NAME)
       .findOneAndUpdate(
@@ -168,6 +174,28 @@ const update = async (boardId, updateData) => {
         },
         {
           $set: updateData,
+        },
+        { returnDocument: "after" }
+      );
+
+    return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const pullColumnOrderIds = async (column) => {
+  try {
+    const result = await GET_DB()
+      .collection(BOARD_COLLECTION_NAME)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(column.boardId),
+        },
+        {
+          $pull: {
+            columnOrderIds: new ObjectId(column._id),
+          },
         },
         { returnDocument: "after" }
       );
@@ -187,4 +215,5 @@ export const boardModel = {
   getAllBoard,
   pushColumnOrderIds,
   update,
+  pullColumnOrderIds,
 };
