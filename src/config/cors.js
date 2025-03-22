@@ -8,7 +8,7 @@ export const corsOptions = {
     // console.log("origin cors", origin);
 
     // allow call api on postman if env is dev
-    if (!origin && env.BUILD_MODE === "dev") {
+    if (env.BUILD_MODE === "dev") {
       return callback(null, true);
     }
 
